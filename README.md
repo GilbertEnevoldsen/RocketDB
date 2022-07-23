@@ -28,8 +28,8 @@ orders = [
 for order in orders:
     db.insert(record=order, location="Shop/Orders")
 
-for record in db.get_where(field="customer", value="Sean Burton"):
+for record in db.get_where(match={"customer": "Sean Burton"}, location="Shop/Orders"):
     print(record["quantity"])
 
-db.write_where(field="customer", value="Lewis Carson", data={"quantity": 2})
+db.write_where(match={"customer": "Lewis Carson", "item": "Shirt"}, data={"quantity": 2}, location="Shop/Orders")
 ```
