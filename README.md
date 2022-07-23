@@ -8,6 +8,28 @@ The goal is to build a python based database manager, with both an api and a too
 RocketDB will also have a web-gui for managing your databases in an easy and manageable way.
 Databases build with RocketDB will be scaleable, secure and with opportunity to switch between web and local storage anytime.
 
-# Status
+# Example code
 
-RocketDB is still in early development, and does not have any utility at this current time.
+```
+import rocketdb
+
+db = rocketdb.Database()
+
+db.create_subbase(id="Shop")
+db.create_table(id="Orders", fields=["customer", "item", "quantity"], location="Shop")
+
+orders = [
+    {"customer": "Sean Burton", "item": "Jeans", "quantity": 1},
+    {"customer": "Lewis Carson", "item": "Shirt", "quantity": 3},
+    {"customer": "Sean Burton", "item": "Socks", "quantity": 2},
+    {"customer": "George Wilson", "item": "Suit", "quantity": 1}
+]
+
+for order in orders:
+    db.insert(record=order, location="Shop/Orders")
+
+for record in db.get_where(field="customer", value="Sean Burton"):
+    print(record["quantity"])
+
+db.write_where(field="customer", value="Lewis Carson", data={"quantity": 2})
+```

@@ -4,20 +4,50 @@ class Database():
 
         self.storage = {}
 
-    def create_subbase(self, id):
+    def create_subbase(self, id, location=""):
 
-        assert type(id) == type(str())
-        self.storage[id] = Subbase()
+        location = location.split("/")
+        while "" in location: 
+            location = location.remove("")
+            if location == None: location = [] 
 
-    def create_tabel(self, id, labels):
+        assert type(id) == type(str()) and not "/" in id
+        if len(location) == 0:
+            self.storage[id] = Subbase()
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].create_subbase(id, location)
 
-        assert type(id) == type(str())
-        self.storage[id] = Tabel(labels)
+    def create_table(self, id, labels, location=""):
 
-    def create_datapoint(self, id, labels):
+        location = location.split("/")
+        while "" in location: 
+            location = location.remove("")
+            if location == None: location = [] 
 
-        assert type(id) == type(str())
-        self.storage[id] = Datapoint(labels)
+        assert type(id) == type(str()) and not "/" in id
+        if len(location) == 0:
+            self.storage[id] = Table(labels)
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].create_subbase(id, labels, location)
+
+    def create_datapoint(self, id, labels, location=""):
+
+        location = location.split("/")
+        while "" in location: 
+            location = location.remove("")
+            if location == None: location = [] 
+
+        assert type(id) == type(str()) and not "/" in id
+        if len(location) == 0:
+            self.storage[id] = Datapoint(labels)
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].create_datapoint(id, labels, location)
 
 
 class Subbase():
@@ -26,13 +56,25 @@ class Subbase():
 
         self.storage = {}
 
-    def create_subbase(self, id):
+    def create_subbase(self, id, location):
 
-        assert type(id) == type(str())
-        self.storage[id] = Subbase()
+        if len(location) == 0:
+            self.storage[id] = Subbase()
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].create_subbase(id, location)
+
+    def create_table(self, id, labels):
+
+        self.storage[id] = Table(labels)
+
+    def create_datapoint(self, id, labels):
+
+        self.storage[id] = Datapoint(labels)
 
 
-class Tabel():
+class Table():
 
     def __init__(self, labels):
 
