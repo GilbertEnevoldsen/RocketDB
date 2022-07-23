@@ -49,12 +49,56 @@ class Database():
             location = location[1:]
             self.storage[immediate_location].create_datapoint(id, fields, location)
 
+    def get_fields(self, location):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            raise ValueError("Cannot get fields from type 'Database'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            return self.storage[immediate_location].get_fields(location)
+
+    def create_field(self, name, location):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            raise ValueError("Cannot create field in type 'Database'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].create_field(name, location)
+
+    def rename_field(self, field, name, location):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            raise ValueError("Cannot rename field from type 'Database'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].rename_field(field, name, location)
+
+    def delete_field(self, field, location):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            raise ValueError("Cannot delete field from type 'Database'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].delete_field(field, location)
+
     def insert(self, record, location):
 
         location = process_location(location)
 
         if len(location) == 0:
-            raise ValueError("Cannot insert into type 'Database'")
+            raise ValueError("Cannot insert to type 'Database'")
         else:
             immediate_location = location[0]
             location = location[1:]
@@ -70,6 +114,61 @@ class Database():
             immediate_location = location[0]
             location = location[1:]
             return self.storage[immediate_location].get(location)
+
+    def get_where(self, match, location):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            raise ValueError("Cannot get from type 'Database'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            return self.storage[immediate_location].get_where(match, location)
+
+    def write(self, data, location):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            raise ValueError("Cannot write to type 'Database'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].write(data, location)
+
+    def write_where(self, match, data, location):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            raise ValueError("Cannot write to type 'Database'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].write_where(match, data, location)
+
+    def delete(self, location):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            self.storage = []
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].delete(location)
+
+    def delete_where(self, location, id="", match={}):
+
+        location = process_location(location)
+
+        if len(location) == 0:
+            self.storage.pop(id)
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].delete_where(match, location)
 
 
 class Subbase():
@@ -100,10 +199,46 @@ class Subbase():
 
         self.storage[id] = Datapoint(fields)
 
+    def get_fields(self, location):
+
+        if len(location) == 0:
+            raise ValueError("Cannot get fields from type 'Subbase'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            return self.storage[immediate_location].get_fields(location)
+
+    def create_field(self, name, location):
+
+        if len(location) == 0:
+            raise ValueError("Cannot create field in type 'Subbase'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].create_field(name, location)
+
+    def rename_field(self, field, name, location):
+
+        if len(location) == 0:
+            raise ValueError("Cannot rename field from type 'Subbase'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].rename_field(field, name, location)
+
+    def delete_field(self, field, location):
+
+        if len(location) == 0:
+            raise ValueError("Cannot delete field from type 'Subbase'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].delete_field(field, location)
+
     def insert(self, record, location):
 
         if len(location) == 0:
-            raise ValueError("Cannot insert into type 'Subbase'")
+            raise ValueError("Cannot insert to type 'Subbase'")
         else:
             immediate_location = location[0]
             location = location[1:]
@@ -117,6 +252,51 @@ class Subbase():
             immediate_location = location[0]
             location = location[1:]
             return self.storage[immediate_location].get(location)
+
+    def get_where(self, match, location):
+
+        if len(location) == 0:
+            raise ValueError("Cannot get from type 'Subbase'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            return self.storage[immediate_location].get_where(match, location)
+
+    def write(self, data, location):
+
+        if len(location) == 0:
+            raise ValueError("Cannot write to type 'Subbase'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].write(data, location)
+
+    def write_where(self, match, data, location):
+
+        if len(location) == 0:
+            raise ValueError("Cannot write to type 'Subbase'")
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].write_where(match, data, location)
+
+    def delete(self, location):
+
+        if len(location) == 0:
+            self.storage = []
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].delete(location)
+
+    def delete_where(self, location, id="", match={}):
+
+        if len(location) == 0:
+            self.storage.pop(id)
+        else:
+            immediate_location = location[0]
+            location = location[1:]
+            self.storage[immediate_location].delete_where(match, location)
 
 
 class Table():

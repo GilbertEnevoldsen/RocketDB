@@ -12,6 +12,7 @@ Databases build with RocketDB will be scaleable, secure and with opportunity to 
 
 ```
 import rocketdb
+from pprint import pprint
 
 db = rocketdb.Database()
 
@@ -32,4 +33,6 @@ for record in db.get_where(match={"customer": "Sean Burton"}, location="Shop/Ord
     print(record["quantity"])
 
 db.write_where(match={"customer": "Lewis Carson", "item": "Shirt"}, data={"quantity": 2}, location="Shop/Orders")
+
+pprint(db.get(location="Shop/Orders"))
 ```
