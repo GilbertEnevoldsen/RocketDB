@@ -1,12 +1,11 @@
 # RocketDB
 
-RocketDB is a work-in-progress database manager that supports both remote and local databases.
+RocketDB is a work-in-progress document based database manager that supports both cloud and local databases.
 
 # Goal
 
-The goal is to build a python based database manager, with both an api and a tool. To allow for both local and remote databases.
-RocketDB will also have a web-gui for managing your databases in an easy and manageable way.
-Databases build with RocketDB will be scaleable, secure and with opportunity to switch between web and local storage anytime.
+The goal is to build a database manager for python, with both an api and a tool. To allow for both local and cloud databases.
+Databases build with RocketDB will be scaleable, secure, flexible and with opportunity to switch between web and local storage anytime.
 
 # Example code
 
@@ -16,8 +15,7 @@ from pprint import pprint
 
 db = rocketdb.Database()
 
-db.create_subbase(id="Shop")
-db.create_table(id="Orders", fields=["customer", "item", "quantity"], location="Shop")
+db.create_archive(id="Orders")
 
 orders = [
     {"customer": "Sean Burton", "item": "Jeans", "quantity": 1},
@@ -27,12 +25,19 @@ orders = [
 ]
 
 for order in orders:
-    db.insert(record=order, location="Shop/Orders")
+    db.insert("Orders", order)
 
-for record in db.get_where(match={"customer": "Sean Burton"}, location="Shop/Orders"):
-    print(record["quantity"])
+pprint(db.get_where(
+    archive="Orders", 
+    match={"customer": "Sean Burton"}, 
+    fields=["quantity"]
+))
 
-db.write_where(match={"customer": "Lewis Carson", "item": "Shirt"}, data={"quantity": 2}, location="Shop/Orders")
+db.write_where(
+    archive="Orders", 
+    match={"customer": "Lewis Carson", "$gt": {"quantity": 1}}, 
+    data={"quantity": 2}
+)
 
-pprint(db.get(location="Shop/Orders"))
+pprint(db.get(archive="Orders"))
 ```
