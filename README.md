@@ -15,7 +15,7 @@ from pprint import pprint
 
 db = rocketdb.Database()
 
-db.create_archive(id="Orders")
+db.create_repository(name="Orders")
 
 orders = [
     {"customer": "Sean Burton", "item": "Jeans", "quantity": 1},
@@ -25,19 +25,19 @@ orders = [
 ]
 
 for order in orders:
-    db.insert("Orders", order)
+    db.insert(repository="Orders", data=order)
 
 pprint(db.get_where(
-    archive="Orders", 
+    repository="Orders", 
     match={"customer": "Sean Burton"}, 
     fields=["quantity"]
 ))
 
 db.write_where(
-    archive="Orders", 
-    match={"customer": "Lewis Carson", "$gt": {"quantity": 1}}, 
+    repository="Orders", 
+    match={"$greater": {"quantity": 1}}, 
     data={"quantity": 2}
 )
 
-pprint(db.get(archive="Orders"))
+pprint(db.get(repository="Orders"))
 ```
